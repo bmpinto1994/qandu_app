@@ -38,4 +38,10 @@ class QuestionUpdateView(UpdateView):
   template_name = 'question/question_form.html'
   fields = ['title', 'description']
 
+from django.views.generic import DeleteView
+
+class QuestionDeleteView(DeleteView):
+  model = Question
+  template_name = 'question/question_confirm_delete.html'
+  success_url = reverse_lazy('question_list')
 # Create your views here.
