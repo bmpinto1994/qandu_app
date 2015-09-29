@@ -31,4 +31,11 @@ class QuestionDetailView(DetailView):
   model = Question
   template_name = 'question/question_detail.html'
 
+from django.views.generic import UpdateView
+
+class QuestionUpdateView(UpdateView):
+  model = Question
+  template_name = 'question/question_form.html'
+  fields = ['title', 'description']
+
 # Create your views here.
