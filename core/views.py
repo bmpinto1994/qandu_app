@@ -142,8 +142,8 @@ class VoteFormView(FormView):
 
 class UserDetailView(DetailView):
   model = User
-  slug_field = 'username'
-  template_name = 'user/user_detail.html'
+  slug_field = "username"
+  template_name = "user/user_detail.html"
   context_object_name = 'user_in_view'
 
   def get_context_data(self, **kwargs):
@@ -154,4 +154,19 @@ class UserDetailView(DetailView):
     answers = Answer.objects.filter(user=user_in_view)
     context['answers'] = answers
     return context
+
+class UserUpdateView(UpdateView):
+  model = User
+  slug_field = "username"
+  template_name = "user/user_form.html"
+  fields = ['email', 'first_name', 'last_name']
+
+  def get_success_url(self):
+    return reverse('user_detail', args=[self.request.user.username])
+
+  def get_object(self, *args, **kwargs):
+    object = super(UserUpdateView, self).get_object(*args, **kwargs)
+    if object != self.request.user:
+      raise PermissionDenied()
+    return object
 # Create your views here.
