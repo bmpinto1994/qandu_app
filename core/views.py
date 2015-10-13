@@ -25,6 +25,7 @@ from django.views.generic import ListView
 class QuestionListView(ListView):
   model = Question
   template_name = "question/question_list.html"
+  paginate_by = 5
 
 from django.views.generic import DetailView
 
@@ -173,7 +174,7 @@ class UserUpdateView(UpdateView):
 class UserDeleteView(DeleteView):
   model = User
   slug_field = "username"
-  template_name 'user/user_confirm_delete.html'
+  template_name = 'user/user_confirm_delete.html'
 
   def get_success_url(self):
     return reverse_lazy('logout')
