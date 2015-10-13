@@ -189,4 +189,9 @@ class UserDeleteView(DeleteView):
     user.is_active = False
     user.save()
     return redirect(self.get_success_url())
+
+class SearchQuestionListView(QuestionListView):
+  def get_queryset(self):
+    imcoming_query_string = self.request.GET.get('query','')
+    return Question.objects.filter(title__icontains=incoming_query_string)
 # Create your views here.
