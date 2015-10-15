@@ -13,11 +13,11 @@ from .models import *
 class QuestionCreateView(CreateView):
   model = Question
   template_name = "question/question_form.html"
-  fields = ['title', 'description']
+  fields = ['title', 'description', 'visibility']
   success_url = reverse_lazy('question_list')
 
   def form_valid(self, form):
-    form,instance.user = self.request.user
+    form.instance.user = self.request.user
     return super(QuestionCreateView, self).form_valid(form)
 
 from django.views.generic import ListView
@@ -150,9 +150,9 @@ class UserDetailView(DetailView):
   def get_context_data(self, **kwargs):
     context = super(UserDetailView, self).get_context_data(**kwargs)
     user_in_view = User.objects.get(username=self.kwargs['slug'])
-    questions = Question.objects.filter(user=user_in_view)
+    questions = Question.objects.filter(user=user_in_view).exclude(visibility=1)
     context['questions'] = questions
-    answers = Answer.objects.filter(user=user_in_view)
+    answers = Answer.objects.filter(user=user_in_view).exclude(visibility=1)
     context['answers'] = answers
     return context
 
@@ -193,6 +193,6 @@ class UserDeleteView(DeleteView):
 
 class SearchQuestionListView(QuestionListView):
   def get_queryset(self):
-    imcoming_query_string = self.request.GET.get('query','')
+    incoming_query_string = self.request.GET.get('query','')
     return Question.objects.filter(title__icontains=incoming_query_string)
 # Create your views here.
